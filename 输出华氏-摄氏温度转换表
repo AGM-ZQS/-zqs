@@ -1,0 +1,22 @@
+#include<stdio.h>
+int main()
+{
+  int fahr,lower,upper;
+  double celsius;
+  scanf("%d %d",&lower,&upper);
+  if(lower>upper)
+  {
+    printf("Invalid.\n");
+  }
+  else if(lower<=upper||upper<=100)
+  {
+    printf("fahr celsius\n");
+    fahr=lower;
+    for(fahr=lower;fahr<=upper;fahr=fahr+2)
+    {
+       celsius = 5.0*(fahr*1.0-32)/9.0;
+       printf("%d%6.1f\n",fahr,celsius);
+    }
+  }
+  return 0;
+}
