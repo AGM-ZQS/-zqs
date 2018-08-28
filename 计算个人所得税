@@ -1,0 +1,35 @@
+#include<stdio.h>
+int main()
+{
+  int i;
+  i=0;
+  double s;
+  scanf("%d",&i);
+  if(i<=1600&&i>0)
+  {
+    printf("%.2lf\n",s=0.00);
+  }
+  else if(i>1600&&i<=2500)
+  {
+    printf("%.2lf\n",s=0.05*(i-1600));
+  }
+  else if(i>2500&&i<=3500)
+  {
+    printf("%.2lf\n",s=0.10*(i-1600));
+  }
+  else if(i>3500&&i<=4500)
+  {
+    printf("%.2lf\n",s=0.15*(i-1600));
+  }
+  else if(i>4500)
+  {
+    printf("%.2lf\n",s=0.20*(i-1600));
+  }
+  else 
+  {
+    printf("%.2lf\n",s=i);
+  }
+ 
+  
+  return 0;
+}
