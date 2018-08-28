@@ -1,0 +1,35 @@
+#include<stdio.h>
+int main()
+{
+  int n,i,x;
+  int A,B,C,D,E;
+  A=B=C=D=E=0;
+  i=1;
+  scanf("%d",&n);
+  for (i=1;i<=n;i++)
+  {
+    scanf("%d",&x);
+    if(x>=90)
+    {
+      A++; 
+    }
+    else if(x>=80&&x<90)
+    {
+      B++;
+    }
+    else if(x>=70&&x<80)
+    {
+      C++;
+    }
+    else if(x>=60&&x<70)
+    {
+      D++;
+    }
+    else
+    {
+      E++;
+    }
+  }
+  printf("%d %d %d %d %d\n",A,B,C,D,E);
+  return 0;
+}
