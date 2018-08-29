@@ -1,0 +1,20 @@
+#include<stdio.h>
+int main()
+{
+  int a,b,x;
+  scanf("%d %d",&a,&b);
+  x=1.0*(a-b)/b*100+0.5;//1*x为整形,1.0*x为double
+  if(x<10)
+  {
+    printf("OK");
+  }
+  else if(x>=50)
+  {
+    printf("Exceed %d%%. License Revoked",x);
+  }
+  else
+  {
+    printf("Exceed %d%%. Ticket 200",x);
+  }
+  return 0;
+}
