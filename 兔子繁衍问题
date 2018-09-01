@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main() 
+{
+	int n;
+	int month1,month2;
+	int sum;
+	int temp=1;
+	month1=0;
+	month2=1;
+	scanf("%d", &n);
+	if(n == month2)
+		printf("%d\n", temp);
+	else 
+	{
+		temp++;
+		sum = month1 + month2;
+		while(sum < n) 
+		{
+			temp++;
+			month1 = month2;
+			month2 = sum; 
+			sum = month1 + month2;
+		}
+		printf("%d\n", temp);
+	}			
+	return 0;
+}
