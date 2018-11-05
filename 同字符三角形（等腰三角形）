@@ -1,0 +1,15 @@
+#include<stdio.h>
+int main(){
+	int i=1,j=1,k=1,n;
+	char ch;
+	while(~scanf(" %c %d",&ch,&n)){
+	   for(i=1;i<=n;i++){
+		   for(j=1;j<=n-i;j++)
+	       printf(" ");
+		   for(k=1;k<=2*i-1;k++)
+		   printf("%c",ch);
+		   printf("\n");
+	   }
+ }
+ return 0;
+}
