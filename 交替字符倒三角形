@@ -1,0 +1,19 @@
+#include<stdio.h>
+int main(){
+	int i=1,j=1,k=1,n,count=1;
+	while(scanf("%d",&n)!=EOF){
+		for(i=1;i<=n;i++){
+			for(j=1;j<=i-1;j++)
+				printf(" ");
+			for(k=1;k<=2*(n-i)+1;k++){
+				if(count%2==0)
+				printf("T");
+				else
+				printf("S");
+				count++;
+			}
+			printf("\n");
+			count=1;
+		}
+	}
+}
