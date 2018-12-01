@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main(){
+	int a[400000];
+	int i,n;
+	
+	for(i=1;i<=400000;i++)
+	a[i]=a[i-1]+A_num(i);
+	while(scanf("%d",&n)!=EOF){
+		printf("%d\n",a[n]);
+	}
+	return 0;
+}
+int A_num(int i){
+  int count1=0,count0=0;
+  while(i){
+    if(i%2==1)
+    count1++;
+    if(i%2==0)
+    count0++;
+    i/=2;
+  }
+  if(count1>count0)
+  return 1;
+  else
+  return 0;
+  
+}
