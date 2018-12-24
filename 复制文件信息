@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main(void){
+	FILE *fp1,*fp2;
+	char ch;
+	/*打开文件，读出数据*/
+	if((fp1=fopen("f12-2.txt","r"))==NULL){
+		printf("file open error!\n");
+		exit(0);
+	} 
+	if((fp2=fopen("f12-3.txt","w"))==NULL){
+		printf("file open error!\n");
+		exit(0);
+	}
+	/*复制数据，从文件1读取，写入文件2*/ 
+	while(!feof(fp1)){
+		ch=fgetc(fp1);  /*从fp1所指示的文件中读取一个字符*/
+		if(ch!=EOF) fputc(ch,fp2); 
+	}
+	/*关闭文件f12-2.txt和人f12-3.txt*/
+	if(fclose(fp1)){
+		printf("can not close the file!\n");
+	    exit(0);
+	} 
+	if(fclose(fp2)){
+		printf("can not close the file!\n");
+		exit(0);
+	} 
+	return 0;
+}
