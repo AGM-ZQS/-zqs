@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void Studentfun1();
+void Studentfun2();
+
+
+void main()  
+{ 
+    int n;  
+
+    while(1)  
+    {  
+        /*主菜单*/  
+        printf("1. 输入学生数据，并保存\n");  
+        printf("2. 打开学生数据文件，显示学生信息\n");  
+        printf("3. 退出\n");  
+        printf("等待输入菜单选项: ");
+        
+        scanf("%d",&n);  
+        getchar();  
+
+        switch(n)  
+        { 
+        case 1:  
+            Studentfun1();  
+            break; 
+
+        case 2: 
+            Studentfun2(); 
+            break;  
+
+        case 3:  
+            exit(0);  
+            break;  
+        } 
+
+    } 
+}  
+void Studentfun1(){
+	FILE *fp=fopen("stu.txt","w"); 
+	
+	int i,p;
+	int num;
+	char name[20];
+	char birth[20];
+	char classname[20];
+	
+	scanf("%d",&p);
+	
+	if(fp){
+	 for(i=0;i<p;i++){
+		scanf("%d %s %s %s",&num,name,birth,classname);
+		fprintf(fp,"%d %s %s %s\n",num,name,birth,classname);
+	 }
+		fclose(fp);
+	}else{
+		printf("File cannot open! " );
+        exit(0);
+	}
+}
+void Studentfun2(){
+	FILE *fp=fopen("stu.txt","r");
+	int num;
+	char name[20];
+	char birth[20];
+	char classname[20];
+	
+	int i;
+	
+    while(fscanf(fp,"%d %s %s %s",&num,name,birth,classname)!=EOF){
+		printf("%d %s %s %s\n",num,name,birth,classname);
+	}
+	fclose(fp);
+}
+
+
