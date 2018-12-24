@@ -1,0 +1,77 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int save();
+void find(int count);
+int n[100];
+
+int main(int argc, char *argv[]){
+	printf("请输入：\n");
+	printf("1.输入整数，并保存到文件\n");
+	printf("2.打开数据文件，并查找\n");
+	printf("3.退出\n");
+	int n,count=0;
+	
+	while(1){
+	  scanf("%d",&n);
+	  switch(n){
+		case 1: count=save();break;
+		case 2: find(count);break;
+	    case 3: exit(0);
+	 }	
+	}
+	return 0;
+}
+int save(){
+	FILE *fp;
+	int count=0,i=0;
+	
+	printf("请输入若干个整数，每个整数之间用空格隔开，并以^z结束\n");
+	if((fp=fopen("d.dat","wb"))==NULL){
+		printf("file open error!\n");
+		exit(0);
+	}else{
+		while(scanf("%d",&n[i])!=EOF){
+			count++;
+			i++;
+		}
+		fwrite(n,100,1,fp);
+	}
+	printf("成功写入%d个整数\n",count);
+	if(fclose(fp)){
+		printf("can not close the file!\n");
+		exit(0);
+	}
+	return count;
+}
+void find(int count){
+	FILE *fp;
+	int i,k;
+	int flag=0;
+	
+	if((fp=fopen("d.dat","rb"))==NULL){
+		printf("file open error!\n");
+		exit(0);
+	}else{
+		printf("请输入待查找的整数\n");
+		scanf("%d",&k);
+		if(count){
+			fread(n,100,1,fp);
+			for(i=0;i<count;i++){
+				if(n[i]==k){
+					printf("%d位于第%d个数\n",k,i+1);
+					flag=1;
+			   }
+			}
+			if(flag==0)
+			printf("NOT FOUND\n");
+		}else{
+			printf("NOT FOUND\n");
+		}
+	}
+	if(fclose(fp)){
+		printf("can not close the file!\n");
+		exit(0);
+	}
+	
+}
