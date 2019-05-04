@@ -1,0 +1,35 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include <assert.h>
+#include <Windows.h>
+#include<memory.h>
+#define LEN 500
+typedef struct list {
+	char line[LEN];
+	struct list *next;
+}List;
+List *head = NULL;
+List *tail, *p;
+
+
+char name[50];  //保存文件名
+int check = 0;  //判断文件是否打开
+FILE *fp;
+
+List *import();
+List *display(List *head);
+List *add(List *head);
+List *removefile(List *head);
+List *copy(List *head);
+List *modify(List *head);
+void *find(List *head);
+List *replace(List *head);
+void exitfile();
+
+void menu();
+
+char *mystrcpy(char *des,const char *src);
+char *mystrcat( char *dst, const char *src );
+int mystrlen(char *p);
+int mystrcmp(char *p,char*q); 
+int isfind(const char *str,const char *f_str);
