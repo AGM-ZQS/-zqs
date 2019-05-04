@@ -1,0 +1,59 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct sysuser{
+	char username[20];
+	char password[8];
+};
+void encrypt(char *pwd);
+int checkuservaild(struct sysuser *psu);
+int main(void){
+	struct sysuser su;
+	printf("enter username: ");scanf("%s",su.username); /*输入待校验的用户名*/
+	printf("enter password: ");scanf("%s",su.password); /*输入待校验的密码*/
+	
+	if(checkuservaild(&su)==1){
+		printf("vaild user!\n");                        /*调用函数进行校验*/ 
+	}else{
+		printf("invaild user!\n");
+	}
+	return 0;
+}
+/*加密算法*/
+void encrypt(char *pwd){
+	int i;
+	/*与15异或，实现低四位取反，高四位保持不变*/
+	for(i=0;i<strlen(pwd);i++){
+		pwd[i]=pwd[i]^15;
+	} 
+} 
+/*校验用户信息的合法性，成功则返回1,否则返回0*/
+int checkuservaild(struct sysuser *psu){
+	FILE *fp;
+	char usr[30],usr1[30],pwd[10];
+	int check=0;                /*检查结果变量，初始化为0*/
+	/*连接生成待校验字符串*/
+	strcpy(usr,psu->username);
+	strcpy(usr,psu->password);
+	encrypt(pwd);
+	/*连接字符串用于校验*/
+	strcat(usr," ");strcat(usr,pwd);strcat(usr,"\n");
+	/*打开文件”f12-2.txt“*/
+	if((fp=fopen("f12-2.txt","r"))==NULL){
+		printf("file open error!\n");
+		exit(0);
+	} 
+	/*从文件读入用户信息数据，遍历判断是否存在*/
+	while(!feof(fp)){
+		fgets(usr1,30,fp);
+		if(strcmp(usr,usr1)==0){
+			check=1;break;
+		}
+	} 
+	/*关闭文件*/
+	if(fclose(fp)){
+		printf("can not close the file!\n");
+		exit(0);
+	} 
+	return check;
+} 
