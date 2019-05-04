@@ -1,0 +1,426 @@
+#include"head.h"
+int isfind(const char *str,const char *f_str)
+{
+	int len=strlen(str);
+	int len_f=strlen(f_str);
+    int i;
+	for(i=0;i<len&&len-i>=len_f;i++)
+	{
+		int k=i;
+		int j=0;
+		while(j<len_f)
+		{
+			if(str[k]==f_str[j])
+			{
+				k++;
+				j++;
+			}
+			else 
+			   break;
+		}
+		if(j==len_f)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+int mystrcmp(char *p,char*q)
+{
+	int i;
+	int flag=0;
+	
+	for(i=0;;i++)
+	{	
+		if(*(p+i)>*(q+i))
+		{
+			flag=1;
+			break;
+		}
+		else if(*(p+i)<*(q+i))
+		{
+			flag=1;
+			break;
+		}
+	}
+	
+	return flag;                            //返回0时字符串相等 
+}
+int mystrlen(char *p)
+{
+	int size = 0;
+	if(p==NULL)//如果是空指针
+	return -1;
+    while(*p)
+    {
+       p++;
+	   size++;
+    }
+    return size;
+}
+char * mystrcpy( char *des,const char *src)
+{
+    if(NULL == src || NULL == des)             //输入字符串为空 
+    {
+        return NULL;
+    }
+
+    char * addr =NULL;
+    addr = des;
+
+    while((*des = *src) != '\0') 
+    {
+        src++;
+        des++;
+    }
+    return addr;
+
+} 
+char* mystrcat(char *dst, const char *src)
+{
+    assert(dst != NULL && src != NULL);      //判断字符串不为空 
+    char *temp = dst;
+    while (*temp != '\0')                   //读取第一个字符串到\0  
+        temp++;
+    while ((*temp++ = *src++) != '\0');     //将第二个字符串接到第一个字符串后 
+
+    return dst;
+}
+void menu() 
+{
+	//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_BLUE);       //改变字体颜色 
+	printf("请选择：1.打开文件<新或旧>    2.显示文件内容\n");
+	printf("        3.插入行              4.删除行\n");
+	printf("        5.拷贝行              6.修改行\n");
+	printf("        7.查找字符串          8.替换字符串\n");
+	printf("        9.存盘退出            0.放弃编辑\n");
+}
+List *import() 
+{
+	printf("请输入文件名<可包括盘符、路径、不超过19个字符>:");
+	int i = 0;
+	scanf("%s", name);
+	FILE *file;
+	check = 1;
+	if ((file = fopen(name, "r")) == NULL) {      //如果文件不存在则新建文件
+		file = fopen(name, "w+");
+		head = (List*)malloc(sizeof(List));       //创建空链表 
+		if (head != NULL)
+		{
+			memset(head, '\0', sizeof(List));
+			head->next = NULL;
+		}
+	}
+	else {                                       //将原本的文件内容创建为链表 
+		if (file == NULL)
+		{
+			printf(" open error.../n");
+			exit(0);
+		}
+		List *h = (List*)malloc(sizeof(List));
+		h->next = NULL;
+		List *r = NULL;
+		List *s = NULL;
+		char temp[500];
+		while(!feof(file))
+		{
+			s = (List*)malloc(sizeof(List));
+			fgets(temp, 500, file);
+			mystrcpy(s->line,temp);
+			if (h->next == NULL)
+			{
+				h->next = s;
+				r = h->next;
+			}
+			else
+			{
+				r->next = s;
+				r = s;
+			}
+			r->next = NULL;
+			
+		}
+			if(h==NULL){
+				head = (List*)malloc(sizeof(List));       //创建空链表 
+			if (head != NULL)
+			{
+				memset(head, '\0', sizeof(List));
+				head->next = NULL;
+			}
+			h=head;
+			}
+		
+		head = h->next;                                  //空链表的头结点 
+	}
+	fp = file;
+	return head;
+}
+List *display(List *head) 
+{
+	if (check == 0) {
+		printf("文件尚未打开\n");
+	}
+	else {                                           //文件成功打开 
+		List *dp;
+		int linenumber = 1;
+		dp = head->next;
+		while(dp){
+			printf("%d: ",linenumber++);            //行号
+			printf("%s",dp->line);                  //结点包含了换行符 
+			dp=dp->next; 
+		}
+		printf("\n");
+	}
+	return head;
+}
+List *add(List *head) 
+{
+	if (check == 0) {
+		printf("文件尚未打开\n");
+	}
+	else {
+		int l, m;
+		char temp[LEN];
+		printf("在第l行前插入m行,请输入l，m：");
+		scanf("%d %d", &l, &m);
+		printf("请顺序输入待插入内容：\n");
+		int i;
+		List *newh = head;
+		l--;
+		while(l){
+			newh=newh->next;
+			l--;
+		}
+		for (i = 0; i < m; i++) {
+			scanf("%s", temp);
+			List *newp = (List*)malloc(sizeof(List));
+			mystrcpy(newp->line, temp);
+			mystrcat(newp->line, "\n");                  //必须先把换行符读入到字符串中 
+			newh->next = newp;
+			newp->next=NULL;                           //尾节点 
+			newh = newp;
+		}
+		
+		printf("成功插入！\n");
+	}
+	return head;
+}
+List *removefile(List*head)
+{
+	if(check==0){
+		printf("文件尚未打开!\n");
+	}else{
+		int l, m;
+	printf("从第l行起删除m行，请输入l，m：");
+	scanf("%d %d", &l, &m);
+	List *ptr1, *ptr2;
+	ptr1 = head;
+	l--;
+	while(l--){
+		ptr1=ptr1->next;
+	}
+	ptr2 = ptr1->next;
+	m--;
+	while(m--){
+		ptr2=ptr2->next;
+	}
+	ptr1->next = ptr2->next;
+	free(ptr2);
+		
+	}
+    
+	return head;
+}
+List *copy(List *head) 
+{
+	if(check==0){
+		printf("文件尚未打开!\n");
+	}else{
+		printf("把第l行开始的m行插在原k行之前，请输入l,m,k:");
+	int l, m, k;
+	scanf("%d %d %d", &l, &m, &k);
+	List*pl = head, *pk = head, *copyhead = NULL, *newline;
+	List*tail = (List*)malloc(sizeof(List));
+	    
+	while (l--) {          //pl指针指向l行 
+		pl= pl->next;
+	
+	}
+	while (k--) {          //pk指向k行
+		pk = pk->next;
+	
+	}
+	while (m--) {          //复制m行 
+		newline = (List*)malloc(sizeof(List));
+		newline->next = NULL;
+		mystrcpy(newline->line, pl->line);
+		if (!copyhead)
+		copyhead = newline;
+		else tail->next = newline;
+		tail = newline;
+		
+		pl = pl->next;
+	}
+	tail->next = pk->next; //将复制链表插入原链表
+	pk->next = copyhead;
+	printf("拷贝成功\n");
+    }
+	return head;           //返回拷贝后链表
+}
+List *modify(List *head) 
+{
+	if(check==0){
+		
+		printf("文件尚未打开!\n");
+	}else{
+		int n;
+		char temp[LEN];
+		int i=0;
+
+	printf("请输入待修改的行号：");
+	scanf("%d", &n);
+	List *find_line=head->next;
+	n--;
+	while (n--) {
+		find_line = find_line->next;
+	}
+	printf("请输入新内容：");
+	scanf("%s",temp);
+	mystrcpy(find_line->line,temp);
+	mystrcat(find_line->line,"\n");        //新内容的换行符拷贝连接 
+	}
+	return head;
+}
+void *find(List *head) 
+{
+	if(check==0){
+		printf("文件未打开!\n");
+	}else{
+		char find_ch[LEN];
+		char ch;
+		printf("请输入待查找的字符串：");
+		scanf("%s", find_ch);
+		int n=mystrlen(find_ch);
+		List *findline=head->next;
+		int cnt=1;
+		int flag=-1;                           //判断是否在该结点找到 
+		int i=0;
+		while(findline){
+			flag=isfind(findline->line,find_ch);
+			if(flag!=-1){
+				printf("第%d行 :%s",cnt,findline->line);
+				printf("在第%d个字符处找到。继续查找吗<Y/N>? ",flag+1);
+				scanf("\n");
+				scanf("%c",&ch);
+				if(ch=='Y'){
+					flag=-1;
+					findline=findline->next;
+			        cnt++;
+			        continue;
+				} 
+				else if(ch=='N')
+				break;
+				else{
+					printf("输入错误！\n");
+					break;
+				}
+		    }
+			findline=findline->next;
+			cnt++;
+		}
+		if(flag==-1)
+		printf("未找到\n");
+			
+	}
+}
+List *replace(List *head) 
+{   
+    if(check==0){
+    	printf("文件未打开！\n");
+	}else{
+		List *th = head;
+		char rpch[100], temp[100], New[100];
+		int flag = 0;                              //退出
+		int row = 0;                               //行号 
+		int n;                                     //rpch的长度 
+		printf("请输入待替换字符串：");
+		scanf("%s", rpch);
+		printf("替换为:");
+		scanf("%s", temp);
+		while (th) {             
+			int i = 0;
+			while (th->line[i] != '\0') {         //遍历一行
+				if (th->line[i] == rpch[0]) {     
+					int j = 1;                    //遍历完字符串 
+					while (th->line[i + j] == rpch[j] && rpch[j] != '\0')
+						j++;
+					if (rpch[j] == '\0') {        //若遍历完则找到 
+						printf("第%d行：%s", row, th->line);
+						printf("第%d个字符处找到。是否替换<Y/N>?:", i + 1);
+						char ch1;
+						scanf("\n%c", &ch1);        //先读取换行 
+						if (ch1 == 'Y') {
+							mystrcpy(New, temp);
+							n=mystrlen(rpch);
+							mystrcat(New, &th->line[i + n]);//将替换内容与替换处后面内容连接 
+							th->line[i] = '\0'; 
+							mystrcat(&th->line[0], New);    //将前面内容与替换内容连接 
+							printf("替换成功\n");
+						}
+						printf("继续替换吗<Y/N>?:");
+						char ch2;
+						scanf("\n%c", &ch2);                              //换行键  
+						if (ch2 == 'N') {
+							flag = 1;      
+							break;
+						}
+					}
+				}
+				i++;
+				if (flag)break;
+			}
+			row++;             //行号
+			th = th->next;       //换下一个结点 
+			if (flag)break;
+		}
+		if (!flag)printf("没找到待替换字符串\n");
+		return head;
+	}
+
+}
+void exitfile() 
+{
+	FILE* file = NULL;
+	file = fopen(name, "w+");//清空原文件
+	if (!file) {
+		printf("保存失败\n");
+		exit(0);
+	}
+	List* savep = head->next;
+	for (; savep; savep = savep->next)
+	fputs(savep->line, file);
+	printf("保存成功\n");
+	printf("please any key to continue\n");
+	fclose(file);
+}
+int main()
+{
+	int n;
+	while (1) {
+		menu();
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_RED); //恢复字体颜色 
+		scanf("%d", &n);
+		switch (n) {
+		case 1:head = import();        break;//打开文件
+		case 2:head = display(head);   break;//显示文件内容
+		case 3:head = add(head);       break;//插入行
+		case 4:head = removefile(head);break;//删除行
+		case 5:head = copy(head);      break;//拷贝行
+		case 6:head = modify(head);    break;//修改行
+		case 7:find(head);             break;//寻找字符串
+		case 8:head = replace(head);   break;//替代字符串
+		case 9:exitfile();             break;//存盘退出
+		case 0:exit(0);                      //放弃编辑
+		}
+	}
+}
